@@ -1,6 +1,7 @@
 library(tidyverse)
 library(shiny)
 library(shinythemes)
+library(shinydashboard)
 library(leaflet)
 
 housing <- read_csv("housing.csv")
@@ -10,10 +11,12 @@ ocean_prox <- unique(housing$ocean_proximity)
 # Define UI for application that draws a histogram
 ui <- fluidPage(
     # App theme
+    
     theme = shinytheme("united"),
     navbarPage("California Housing",
                tabPanel("Map",
 
+                        
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
         sidebarPanel(
@@ -41,12 +44,14 @@ ui <- fluidPage(
 
         # Show a plot of the generated distribution
         mainPanel(
-           leafletOutput("leafletPlot")
+            
+           leafletOutput("leafletPlot"))
         )
         )
     )
     )
-    )
+    
+    
 
 
 # Define server logic required to draw a histogram

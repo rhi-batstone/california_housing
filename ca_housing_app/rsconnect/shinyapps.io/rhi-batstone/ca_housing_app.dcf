@@ -5,6 +5,6 @@ account: rhi-batstone
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2477541
-bundleId: 3291702
+bundleId: 3291892
 url: https://rhi-batstone.shinyapps.io/ca_housing_app/
-when: 1592570715.33284
+when: 1592573176.11782

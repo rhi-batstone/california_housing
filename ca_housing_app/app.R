@@ -1,6 +1,7 @@
 library(tidyverse)
 library(shiny)
 library(shinythemes)
+library(shinydashboard)
 library(leaflet)
 
 housing <- read_csv("housing.csv")
@@ -10,48 +11,44 @@ ocean_prox <- unique(housing$ocean_proximity)
 # Define UI for application that draws a histogram
 ui <- fluidPage(
     # App theme
+    bootstrapPage(
     theme = shinytheme("united"),
+    
     navbarPage("California Housing",
                tabPanel("Map",
-
-    # Sidebar with a slider input for number of bins 
-    sidebarLayout(
-        sidebarPanel(
-            sliderInput("value",
-                        "House Value Range",
-                        min = min(housing$median_house_value),
-                        max = max(housing$median_house_value),
-                        value = c(min, max)
-                        ),
                         
-            checkboxGroupInput("location", 
-                               "Location", 
-                               choices = list("Near Bay" = "NEAR BAY", 
-                                              "<1hr to Ocean" = "<1H OCEAN", 
-                                              "Inland" = "INLAND", 
-                                              "Near Ocean" = "NEAR OCEAN", 
-                                              "Island" = "ISLAND"),
-                               selected = c("NEAR BAY", 
-                                            "<1H OCEAN", 
-                                            "INLAND", 
-                                            "NEAR OCEAN", 
-                                            "ISLAND")
-                               
-        )),
+                        tags$style(type = "text/css", "html, body {width:100%;height:100%}"),
+                        plotOutput("leafletPlot", width = "100%", height = "100%"),
+                        absolutePanel(#top = 10, right = 10,
+                                      sliderInput("value",
+                                                  "House Value Range",
+                                                  min = min(housing$median_house_value),
+                                                  max = max(housing$median_house_value),
+                                                  value = c(min, max)
+                                      ),
+                                      
+                                      checkboxGroupInput("location", 
+                                                         "Location", 
+                                                         choices = list("Near Bay" = "NEAR BAY", 
+                                                                        "<1hr to Ocean" = "<1H OCEAN", 
+                                                                        "Inland" = "INLAND", 
+                                                                        "Near Ocean" = "NEAR OCEAN", 
+                                                                        "Island" = "ISLAND"),
+                                                         selected = c("NEAR BAY", 
+                                                                      "<1H OCEAN", 
+                                                                      "INLAND", 
+                                                                      "NEAR OCEAN", 
+                                                                      "ISLAND")
+                                                         
+                                      ))))))
+    
 
-        # Show a plot of the generated distribution
-        mainPanel(
-           leafletOutput("leafletPlot")
-        )
-        )
-    )
-    )
-    )
+
 
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
-
+    
     output$leafletPlot <- renderLeaflet({
         
         # Create a color palette with handmade bins.
@@ -89,7 +86,7 @@ server <- function(input, output) {
                 opacity = 0.9,
                 title = "Median House Value $",
                 position = "topright"
-            # Can't make labels work when using pal instead of col
+                # Can't make labels work when using pal instead of col
                 # labels = c("< $100,000", 
                 #            "< $200,000", 
                 #            "< $300,000", 
